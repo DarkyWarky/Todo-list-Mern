@@ -10,7 +10,7 @@ const Lists = () => {
   useEffect(() => {
     axios
       .get("http://localhost:5000/todos")
-      .then((response) => setTodos(response.data))
+      .then((response) => setTasks(response.data))
       .catch((error) => console.error(error));
   }, []);
 
