@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import React from "react";
 import Items from "./Items";
-import { Buttons } from "./Buttons";
+import Search_bar from "./Search_bar";
+import axios from "axios";
 
 const Lists = () => {
   const [tasks, setTasks] = useState([]);
@@ -9,7 +10,7 @@ const Lists = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/todos")
+      .get("http://localhost:3000/todos")
       .then((response) => setTasks(response.data))
       .catch((error) => console.error(error));
   }, []);
@@ -17,7 +18,7 @@ const Lists = () => {
   const addTask = () => {
     if (newTask.trim() !== "") {
       axios
-        .post("http://localhost:5000/todos", { task: newTask })
+        .post("http://localhost:3000/todos", { task: newTask })
         .then((response) => {
           setTasks([...tasks, response.data]);
           setNewTask("");
@@ -26,6 +27,12 @@ const Lists = () => {
     }
   };
 
+  const handlekeypress =(event)=>{
+    if (event.key === 'Enter'){
+      addTask()
+    }
+  }
+
   const deleteTask = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks.splice(index, 1);
@@ -33,20 +40,24 @@ const Lists = () => {
   };
   return (
     <div>
+      <Search_bar/>
       <input
         type="text"
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
+        onKeyDown={handlekeypress}
         placeholder="Enter task"
         className="w-[50%] ml-[25%] h-20 text-2xl cursor-text p-3 border-4 border-neutral-400 rounded-3xl"
       />
-      <Buttons onAdd={addTask} />
+
+      <button onClick={addTask} className=' bg-red-500 p-3 text-3xl rounded-xl font-bold'>ADD</button>
+
       <div className="bg-green-200 flex justify-center h-screen">
         <div className="bg-blue-300 grid grid-rows-5 grid-cols-1 p-4 m-10 items-center w-[50%] h-auto justify-evenly">
-          {tasks.map((tasks, index) => (
+          {tasks.map((taskItem, index) => (
             <Items
               key={index}
-              task={tasks}
+              task={taskItem.task}
               onDelete={() => deleteTask(index)}
             />
           ))}
