@@ -9,6 +9,7 @@ const Lists = () => {
   const [newTask, setNewTask] = useState("");
   const [taskNo, setTaskNo] = useState(0)
 
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/todos")
@@ -17,7 +18,6 @@ const Lists = () => {
   }, []);
 
   const addTask = () => {
-    console.log(taskNo)
     if (newTask.trim() !== "") {
       axios
       .post("http://localhost:3000/add", { task: newTask,index:taskNo })
@@ -39,6 +39,18 @@ const Lists = () => {
       .catch((error) => console.error(error));
   };
 
+
+  const search = (content)=>{
+    axios
+      .post("http://localhost:3000/search",{content :content})
+      .then((response)=>{
+        setTasks(response.data)
+      })
+      .catch((error)=>{
+        console.error(error)
+      })
+  }
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       addTask();
@@ -47,7 +59,7 @@ const Lists = () => {
 
   return (
     <div>
-      <SearchBar />
+      <SearchBar onSearch={search}/>
       <input
         type="text"
         value={newTask}
