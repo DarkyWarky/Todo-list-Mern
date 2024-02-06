@@ -65,7 +65,7 @@ const Lists = () => {
       </button>
 
       <div className="bg-green-200 flex justify-center h-screen">
-        <div className="bg-blue-300 grid grid-rows-5 grid-cols-1 p-4 m-10 items-center w-[50%] h-auto justify-evenly">
+        <div className="bg-blue-300 grid grid-rows-5 grid-cols-1 p-4 m-10 items-center w-[50%] h-auto justify-evenly gap-4 max-w-5xl">
           {tasks.map((taskItem, index) => (
             <Items
               key={index}
