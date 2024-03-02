@@ -20,7 +20,8 @@ mongoose.connect("mongodb+srv://Zwar:DarkyWarky@zwardb.1makfjy.mongodb.net/Todo-
 
 const todoSchema = new mongoose.Schema({
   task: String,
-  index: Number
+  index: Number,
+  description:String
 });
 
 const Todo = mongoose.model("Todo", todoSchema);
@@ -29,10 +30,21 @@ app.use(express.json());
 
 app.post("/add", async (req, res) => {
   const { task,index } = req.body;
+  const description=" "
 
   try {
-    const newTodo = new Todo({ task,index });
+    const newTodo = new Todo({ task,index,description});
     await newTodo.save();
+    res.status(201).json(newTodo);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+app.post("/adddescp", async (req, res) => {
+  const {descp,index } = req.body;
+  try {
+    const newTodo = await Todo.findOneAndUpdate({index:index},{description:descp});
     res.status(201).json(newTodo);
   } catch (error) {
     console.error(error);

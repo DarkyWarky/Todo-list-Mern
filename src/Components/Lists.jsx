@@ -13,7 +13,9 @@ const Lists = () => {
   useEffect(() => {
     axios
       .get("http://localhost:3001/todos")
-      .then((response) => setTasks(response.data))
+      .then((response) => {
+        setTasks(response.data)
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -81,6 +83,8 @@ const Lists = () => {
               key={index}
               task={taskItem.task}
               onDelete={()=>deleteTask(taskItem.index)}
+              index={index}
+              descp={taskItem.description}
             />
           ))}
         </div>
