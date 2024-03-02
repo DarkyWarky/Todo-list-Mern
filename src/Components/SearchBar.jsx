@@ -10,7 +10,7 @@ const SearchBar = ({onSearch}) => {
     onSearch(content)
   }
   return (
-    <div className="flex justify-around bg-red-400 p-3">
+    <div className="flex justify-around bg-gray-700 p-3">
       <div className="relative w-1/2">
         <div className="flex items-center">
           <FontAwesomeIcon icon={faSearch} className="text-zinc-500 mr-2 absolute right-4 scale-150" onClick={handleClick}/>

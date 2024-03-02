@@ -12,7 +12,7 @@ const Lists = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/todos")
+      .get("http://localhost:3001/todos")
       .then((response) => setTasks(response.data))
       .catch((error) => console.error(error));
   }, []);
@@ -20,7 +20,7 @@ const Lists = () => {
   const addTask = () => {
     if (newTask.trim() !== "") {
       axios
-      .post("http://localhost:3000/add", { task: newTask,index:taskNo })
+      .post("http://localhost:3001/add", { task: newTask,index:taskNo })
       .then((response) => {
         setTasks([...tasks, response.data]);
         setNewTask("");
@@ -32,7 +32,7 @@ const Lists = () => {
 
   const deleteTask = (index) => {
     axios
-      .post("http://localhost:3000/del", {number : index })
+      .post("http://localhost:3001/del", {number : index })
       .then((response) => {
         setTasks(response.data);
       })
@@ -42,7 +42,7 @@ const Lists = () => {
 
   const search = (content)=>{
     axios
-      .post("http://localhost:3000/search",{content :content})
+      .post("http://localhost:3001/search",{content :content})
       .then((response)=>{
         setTasks(response.data)
       })
@@ -58,7 +58,7 @@ const Lists = () => {
   };
 
   return (
-    <div>
+    <div className=" bg-gray-700">
       <SearchBar onSearch={search}/>
       <input
         type="text"
@@ -71,13 +71,11 @@ const Lists = () => {
 
       <button
         onClick={addTask}
-        className="bg-red-500 p-3 text-3xl rounded-xl font-bold"
-      >
-        ADD
-      </button>
+        className=" text-6xl rounded-3xl font-bold h-full text-white"
+      >+</button>
 
-      <div className="bg-green-200 flex justify-center h-screen">
-        <div className="bg-blue-300 grid grid-rows-5 grid-cols-1 p-4 m-10 items-center w-[50%] h-auto justify-evenly gap-4 max-w-5xl">
+      <div className="bg-gray-700 flex justify-center min-h-screen">
+        <div className=" grid auto-rows- grid-cols-1 p-4 m-10 items-center w-[50%] h-fit justify-evenly gap-4 max-w-5xl rounded-lg">
           {tasks.map((taskItem, index) => (
             <Items
               key={index}

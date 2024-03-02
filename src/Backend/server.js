@@ -1,13 +1,12 @@
-const express = require("express");
 const mongoose = require("mongoose");
+const express = require("express");
 const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.use(cors());
 
-console.log("hello");
 mongoose.connect("mongodb+srv://Zwar:DarkyWarky@zwardb.1makfjy.mongodb.net/Todo-List", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -74,6 +73,9 @@ app.post("/search", async (req,res)=>{
     res.status(500).json({ message: "Server Error" });
   }
 })
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
