@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
+const routes = require("./routes")
+const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
+app.use(bodyParser.json());
 
 mongoose.connect("mongodb+srv://Zwar:DarkyWarky@zwardb.1makfjy.mongodb.net/Todo-List", {
   useNewUrlParser: true,
@@ -86,7 +89,7 @@ app.post("/search", async (req,res)=>{
   }
 })
 
-
+app.use("/loginapi",routes)
 
 
 app.listen(PORT, () => {
