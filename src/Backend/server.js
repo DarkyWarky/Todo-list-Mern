@@ -3,11 +3,16 @@ const express = require("express");
 const cors = require("cors");
 const routes = require("./routes")
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser')
 
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
+app.use(cookieParser())
+app.use(cors({
+  origin:['http://localhost:3000'],
+  credentials:true
+}));
 app.use(bodyParser.json());
 
 mongoose.connect("mongodb+srv://Zwar:DarkyWarky@zwardb.1makfjy.mongodb.net/Todo-List", {

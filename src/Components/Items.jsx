@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Items = ({ task, onDelete,index,descp }) => {
   const [expanded, setExpanded] = useState(true);
@@ -41,8 +43,8 @@ const Items = ({ task, onDelete,index,descp }) => {
           {expandText}
         </button>
       </div>
-      <button className="delete bg-cyan-300 p-3 rounded-3xl" onClick={onDelete}>
-        Delete
+      <button className=" bg-cyan-300 p-7 rounded-xl" onClick={onDelete}>
+      <FontAwesomeIcon icon={faTrash} className=" scale-150 hover: opacity-75" />
       </button>
     </div>
   );

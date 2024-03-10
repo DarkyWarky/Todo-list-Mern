@@ -1,22 +1,25 @@
 import React from "react";
 import {useForm} from "react-hook-form"
 import {DevTool} from "@hookform/devtools"
-import {Link} from "react-router-dom"
+import {Link,useNavigate } from "react-router-dom"
 import axios from "axios";
 
 const Login = () => {
   const inputstyle = "p-3 bg-red-50 rounded-m w-full";
-
+  const navigate = useNavigate();
   const form=useForm()
   const {register,control,handleSubmit,formState}=form
   const{errors}=formState
+  axios.defaults.withCredentials =true
   const onSubmit = (data)=>{
-    // axios.post("http://localhost:3001/loginapi/login",data)
-    // .then(()=>{
-    //   console.log("Done")
-    // }).catch((err)=>{
-    //   console.log(err)
-    // })
+    axios.post("http://localhost:3001/loginapi/login",data)
+    .then((res)=>{
+      if(res.data.Login === true){
+        navigate("/")
+      }
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
   return (
     <div className="flex justify-center items-center bg-gray-700 h-[calc(100vh-10vh)] flex-col">

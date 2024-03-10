@@ -4,6 +4,7 @@ import { Navbar } from './Components/Navbar'
 import Lists from './Components/Lists'
 import Login from './Components/Login'
 import Register from './Components/Register'
+import Feedback from './Components/Feedback'
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/" element={<Lists/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/feedback" element={<Feedback/>} />
         </Routes>
     </Router>
   )

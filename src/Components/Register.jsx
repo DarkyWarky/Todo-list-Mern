@@ -9,14 +9,15 @@ const Register = () => {
   const form=useForm()
   const {register,control,handleSubmit,formState,getValues}=form
   const{errors}=formState
+  
   const onSubmit = (data)=>{
     console.log(data)
-    // axios.post("http://localhost:3001/loginapi/register",data)
-    // .then(()=>{
-    //   console.log("Done")
-    // }).catch((err)=>{
-    //   console.log(err)
-    // })
+    axios.post("http://localhost:3001/loginapi/register",data)
+    .then(()=>{
+      console.log("Done")
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
   return (
     <div className="flex justify-center items-center bg-gray-700 h-[calc(100vh-10vh)] flex-col">
