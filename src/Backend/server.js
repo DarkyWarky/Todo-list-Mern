@@ -4,7 +4,7 @@ const cors = require("cors");
 const routes = require("./routes")
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
-
+require('dotenv').config()
 const app = express();
 const PORT = 3001;
 
@@ -15,7 +15,7 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
-mongoose.connect("mongodb+srv://Zwar:DarkyWarky@zwardb.1makfjy.mongodb.net/Todo-List", {
+mongoose.connect(process.env.MONGO_DB_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -29,7 +29,8 @@ mongoose.connect("mongodb+srv://Zwar:DarkyWarky@zwardb.1makfjy.mongodb.net/Todo-
 const todoSchema = new mongoose.Schema({
   task: String,
   index: Number,
-  description:String
+  description:String,
+  email:String
 });
 
 const Todo = mongoose.model("Todo", todoSchema);
@@ -37,11 +38,11 @@ const Todo = mongoose.model("Todo", todoSchema);
 app.use(express.json());
 
 app.post("/add", async (req, res) => {
-  const { task,index } = req.body;
+  const { task,index,email } = req.body;
   const description=" "
 
   try {
-    const newTodo = new Todo({ task,index,description});
+    const newTodo = new Todo({ task,index,description,email});
     await newTodo.save();
     res.status(201).json(newTodo);
   } catch (error) {
@@ -50,9 +51,9 @@ app.post("/add", async (req, res) => {
   }
 });
 app.post("/adddescp", async (req, res) => {
-  const {descp,index } = req.body;
+  const {descp,index,email } = req.body;
   try {
-    const newTodo = await Todo.findOneAndUpdate({index:index},{description:descp});
+    const newTodo = await Todo.findOneAndUpdate({index:index,email:email},{description:descp});
     res.status(201).json(newTodo);
   } catch (error) {
     console.error(error);
@@ -60,10 +61,10 @@ app.post("/adddescp", async (req, res) => {
   }
 });
 app.post("/del", async (req, res) => {
-  const { number } = req.body;
+  const { number,email } = req.body;
   try {
-    await Todo.deleteOne({index:number})
-    const todos = await Todo.find();
+    await Todo.deleteOne({index:number,email:email})
+    const todos = await Todo.find({email:email});
     res.json(todos);
 
   } catch (error) {
@@ -72,9 +73,10 @@ app.post("/del", async (req, res) => {
   }
 });
 
-app.get("/todos", async (req, res) => {
+app.post("/todos", async (req, res) => {
+  const {email}= req.body
   try {
-    const todos = await Todo.find();
+    const todos = await Todo.find({email:email});
     res.json(todos);
   } catch (error) {
     console.error(error);
@@ -82,10 +84,10 @@ app.get("/todos", async (req, res) => {
   }
 });
 app.post("/search", async (req,res)=>{
-  const {content} = req.body
+  const {content,email} = req.body
   const Regex = new RegExp(content, 'i');
   try{
-    const todos= await Todo.find({task:{ $regex: Regex}})
+    const todos= await Todo.find({task:{ $regex: Regex},email:email})
     res.json(todos)
   }
   catch(error){

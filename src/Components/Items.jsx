@@ -3,7 +3,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const Items = ({ task, onDelete,index,descp }) => {
+const Items = ({ task, onDelete,index,descp,email }) => {
   const [expanded, setExpanded] = useState(true);
   const [expandText, setExpandText] = useState("Expand...");
   const textareaRef = useRef(null);
@@ -12,7 +12,7 @@ const Items = ({ task, onDelete,index,descp }) => {
   const updateDescp = (e) => {
     const data=e.target.value
     axios
-      .post("http://localhost:3001/adddescp", { descp:data,index: index })
+      .post("http://localhost:3001/adddescp", { descp:data,index: index, email:email })
       .catch((error) => console.error(error));
   };
   const toggleExpansion = () => {

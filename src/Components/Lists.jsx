@@ -8,21 +8,33 @@ const Lists = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [taskNo, setTaskNo] = useState(0)
+  const [email,setEmail]= useState("")
 
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/todos")
-      .then((response) => {
-        setTasks(response.data)
-      })
-      .catch((error) => console.error(error));
-  }, []);
+    axios.defaults.withCredentials =true
+         axios.get('http://localhost:3001/loginapi/verifyUser')
+        .then((res)=>{
+            if(res.data.valid ===true){
+              setEmail(res.data.email)
+              axios
+              .post("http://localhost:3001/todos",{email:email})
+              .then((response) => {
+                setTasks(response.data)
+              })
+              .catch((error) => console.error(error));
+            }
+            else{
+                
+            }
+        })
+     
+  }, [email]);
 
   const addTask = () => {
     if (newTask.trim() !== "") {
       axios
-      .post("http://localhost:3001/add", { task: newTask,index:taskNo })
+      .post("http://localhost:3001/add", { task: newTask,index:taskNo,email:email })
       .then((response) => {
         setTasks([...tasks, response.data]);
         setNewTask("");
@@ -34,7 +46,7 @@ const Lists = () => {
 
   const deleteTask = (index) => {
     axios
-      .post("http://localhost:3001/del", {number : index })
+      .post("http://localhost:3001/del", {number : index,email:email })
       .then((response) => {
         setTasks(response.data);
       })
@@ -44,7 +56,7 @@ const Lists = () => {
 
   const search = (content)=>{
     axios
-      .post("http://localhost:3001/search",{content :content})
+      .post("http://localhost:3001/search",{content :content,email:email})
       .then((response)=>{
         setTasks(response.data)
       })
@@ -85,6 +97,7 @@ const Lists = () => {
               onDelete={()=>deleteTask(taskItem.index)}
               index={index}
               descp={taskItem.description}
+              email={email}
             />
           ))}
         </div>

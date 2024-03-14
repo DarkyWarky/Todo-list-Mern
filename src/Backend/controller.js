@@ -2,6 +2,7 @@
 const jwt = require("jsonwebtoken")
 const LoginModel = require("./loginModel")
 const bcrypt = require("bcryptjs")
+require('dotenv').config()
 
 const securePassword = async(password)=>{
     try {
@@ -25,8 +26,8 @@ const authUser = (req,res)=>{
     .then(user=>{
         if(user){
             if(checkPassword(user_data.password,user.password)){
-                const accessToken = jwt.sign({email:user_data.email},'jwt-access-token-secret-key',{expiresIn:'1m'})
-                const refreshToken = jwt.sign({email:user_data.email},'jwt-refresh-token-secret-key',{expiresIn:'5m'})
+                const accessToken = jwt.sign({email:user_data.email},process.env.JWT_SECRET_KEY_ACCESS_TOKEN,{expiresIn:'15m'})
+                const refreshToken = jwt.sign({email:user_data.email},process.env.JWT_SECRET_KEY_REFRESH_TOKEN,{expiresIn:'12h'})
                 res.cookie('accessToken',accessToken,{maxAge:60000})
                 res.cookie('refreshToken',refreshToken,{maxAge:300000,httpOnly:true,secure:true,sameSite:'strict'})
                 return res.json({Login:true})
@@ -57,19 +58,19 @@ const registerUser = async (req,res)=>{
     }
 }
 
-const verifyUser = (req,res,next)=>{
+const verifyUser = (req,res)=>{
     const accessToken = req.cookies.accessToken
     if(!accessToken){
         if (renewToken(req,res)) {
             return res.json({valid:true,message:'valid token'})
         }
     }else{
-        jwt.verify(accessToken,'jwt-access-token-secret-key',(err,decoded)=>{
+        jwt.verify(accessToken,process.env.JWT_SECRET_KEY_ACCESS_TOKEN,(err,decoded)=>{
             if (err){
             return res.json({valid:false,message:'invalid token'})
             }else{
                 req.email = decoded.email
-                return res.json({valid:true,message:'valid token'})
+                return res.json({valid:true,message:'valid token',email:decoded.email})
             }
         })
     }
@@ -80,11 +81,11 @@ const renewToken = (req,res)=>{
     if(!refreshToken){
         res.json({valid:false,message:'no refresh token'})
     }else{
-        jwt.verify(refreshToken,'jwt-refresh-token-secret-key',(err)=>{
+        jwt.verify(refreshToken,process.env.JWT_SECRET_KEY_REFRESH_TOKEN,(err,decoded)=>{
             if (err){
             res.json({valid:false,message:'invalid token'})
             }else{
-                const accessToken = jwt.sign({email:user_data.email},'jwt-accesss-token-secret-key',{expiresIn:'1m'})
+                const accessToken = jwt.sign({email:decoded.email},process.env.JWT_SECRET_KEY_ACCESS_TOKEN,{expiresIn:'12h'})
                 res.cookie('accessToken',accessToken,{maxAge:60000})
                 exist =true
             }

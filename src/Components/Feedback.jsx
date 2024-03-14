@@ -6,7 +6,7 @@ const Feedback = () => {
     const [message , setMessage]= useState('')
     useEffect(()=>{
         axios.defaults.withCredentials =true
-        axios.get('http://localhost:3001/loginapi/feedback')
+        axios.get('http://localhost:3001/loginapi/verifyUser')
         .then((res)=>{
             if(res.data.valid ===true){
                 setMessage('Logged in')
